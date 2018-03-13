@@ -306,7 +306,14 @@ pipeline {
       steps{
         script{
           env.EXT_RELEASE = sh(
-            script: '''curl -s -L $EXT_BLOB | md5sum | cut -c1-8''',
+            script: '''#! /bin/bash
+                       URL="${EXT_BLOB}"
+                       # Make sure the remote file returns a 200 status or fail
+                       if [ $(curl -I -sL -w "%{http_code}" ${URL} -o /dev/null) == 200 ]; then
+                         curl -s -L ${URL} | md5sum | cut -c1-8
+                       else
+                         exit 1
+                       fi''',
             returnStdout: true).trim()
           env.RELEASE_LINK = sh(
             script: '''echo "Blob changed at ${EXT_BLOB}"" ''',
