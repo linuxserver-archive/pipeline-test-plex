@@ -315,7 +315,7 @@ pipeline {
                        fi''',
             returnStdout: true).trim()
           env.RELEASE_LINK = sh(
-            script: '''echo "Blob changed at ${EXT_BLOB}" ''',
+            script: '''echo "Remote Blob Change" ''',
             returnStdout: true).trim()
         }
       }
