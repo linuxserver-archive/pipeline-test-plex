@@ -309,8 +309,8 @@ pipeline {
             script: '''#! /bin/bash
                        URL="${EXT_BLOB}"
                        # Make sure the remote file returns a 200 status or fail
-                       if [ $(curl -I -sL -w "%{http_code}" ${URL} -o /dev/null) == 200 ]; then
-                         curl -s -L ${URL} | md5sum | cut -c1-8
+                       if [ $(curl -I -sL -w "%{http_code}" "${URL}" -o /dev/null) == 200 ]; then
+                         curl -s -L "${URL}" | md5sum | cut -c1-8
                        else
                          exit 1
                        fi''',
