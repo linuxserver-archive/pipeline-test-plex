@@ -8,7 +8,7 @@ pipeline {
     EXT_REPO = 'none'
     EXT_NPM = 'none'
     EXT_PIP = 'none'
-    EXT_BLOB = 'https://plex.tv/downloads/latest/1?channel=8&build=linux-ubuntu-x86_64&distro=ubuntu'
+    EXT_BLOB = 'https://plex.tv/downloads/latest/1?channel=8\\&build=linux-ubuntu-x86_64\\&distro=ubuntu'
     BUILD_VERSION_ARG = 'PLEX_VERSION'
     LS_USER = 'linuxserver'
     LS_REPO = 'pipeline-test-plex'
@@ -101,7 +101,7 @@ pipeline {
         }
       }
       steps{
-        echo 'Grabbing the latest alpine base image'
+        echo 'Grabbing the latest ubuntu base image'
         sh '''docker pull ubuntu:${DIST_TAG}'''
         echo 'Generating the package hash from the current versions'
         script{
@@ -306,14 +306,7 @@ pipeline {
       steps{
         script{
           env.EXT_RELEASE = sh(
-            script: '''#! /bin/bash
-                       URL="${EXT_BLOB}"
-                       # Make sure the remote file returns a 200 status or fail
-                       if [ $(curl -I -sL -w "%{http_code}" "${URL}" -o /dev/null) == 200 ]; then
-                         curl -s -L "${URL}" | md5sum | cut -c1-8
-                       else
-                         exit 1
-                       fi''',
+            script: '''curl -s -L ${EXT_BLOB} | md5sum | cut -c1-8''',
             returnStdout: true).trim()
           env.RELEASE_LINK = sh(
             script: '''echo "Blob changed at ${EXT_BLOB}"" ''',
