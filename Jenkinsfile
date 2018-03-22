@@ -64,6 +64,9 @@ pipeline {
                        # If this is a new commit then increment the LinuxServer release version
                        if [ "${tagsha}" == "${COMMIT_SHA}" ]; then
                          echo ${LS_RELEASE_NUMBER}
+                       # If the commit is empty for this job do not increment
+                       elif [ -z "${GIT_COMMIT}" ]; then
+                         echo ${LS_RELEASE_NUMBER}
                        else
                          echo $((${LS_RELEASE_NUMBER} + 1))
                        fi''',
